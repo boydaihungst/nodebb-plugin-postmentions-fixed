@@ -1,7 +1,7 @@
 {
   "name": "nodebb-plugin-postmentions",
   "version": "0.0.1",
-  "description": "NodeBB Plugin that allows users to mention posts by prepending an '&' sign to the post id",
+  "description": "NodeBB Plugin that allows users to mention categories & topics by prepending an '&t' (topics) and '&c' (categories) sign",
   "main": "library.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

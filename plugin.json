@@ -1,8 +1,8 @@
 {
 	"id": "nodebb-plugin-postmentions",
 	"name": "Post Mentions",
-	"description": "NodeBB Plugin that allows users to mention other posts by prepending an '&' sign to the post id",
-	"url": "https://github.com/estebanconstante/nodebb-plugin-mentions",
+	"description": "NodeBB Plugin that allows users to mention other topics by prepending an '&t' sign and categories ('&c')",
+	"url": "https://github.com/estebanconstante/nodebb-plugin-postmentions",
 	"library": "./library.js",
 	"scripts": [
 		"static/autofill.js"
