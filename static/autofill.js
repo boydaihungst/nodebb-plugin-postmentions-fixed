@@ -43,8 +43,6 @@ $(document).ready(function() {
 				if (!term) {
 					var categories = catList.filter(function(value, index, array) {
 						return array.indexOf(value) === index;
-					}).sort(function(a, b) {
-						return a.toLocaleLowerCase() > b.toLocaleLowerCase();
 					});
 					callback(categories);
 				} else {
