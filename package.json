@@ -1,6 +1,6 @@
 {
   "name": "nodebb-plugin-postmentions",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "NodeBB Plugin that allows users to mention categories & topics by prepending an '&t' (topics) and '&c' (categories) sign",
   "main": "library.js",
   "scripts": {
