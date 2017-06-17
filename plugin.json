@@ -3,13 +3,7 @@
 	"name": "Post Mentions",
 	"description": "NodeBB Plugin that allows users to mention other topics by prepending an '&t' sign and categories ('&c')",
 	"url": "https://github.com/estebanconstante/nodebb-plugin-postmentions",
-	"library": "./library.js",
 	"scripts": [
 		"static/autofill.js"
-	],
-	"less": [
-		"static/style.less"
-	],
-	"languages": "languages",
-	"defaultLang": "en_GB"
+	]
 }

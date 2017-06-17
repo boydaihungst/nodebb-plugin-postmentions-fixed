@@ -1,7 +1,5 @@
-# Username/Group Mentions
-
-This NodeBB plugin allows posters to reference (or *mention*) other users or groups on a NodeBB by simply
-precluding the `#` symbol before a username.
+This NodeBB plugin allows posters to reference (or *mention*) other categories or topics on a NodeBB by simply
+precluding the `&c` (for categories) and the `&t` symbol for a topic.
 
 A link is automatically added to the post.
 
