@@ -3,78 +3,72 @@
 
 
 $(document).ready(function() {
-	var groupList = [];
-	var localUserList = [];
-
+	// start variable to grab the last JSON data
+	var lastData;
+	var topicList;
+	var catList = [];
+	var catData = [];
 	$(window).on('composer:autocomplete:init', function(ev, data) {
-		localUserList = loadDomUsers();
-
-		if (!groupList.length) {
-			loadGroupList();
-		}
-
-		var subset;
-		var strategy = {
-			match: /\B@([^\s\n]*)?$/,
+		loadCatNames();
+		var topicSearch = {
+			match: /\&t([^\s\n]*)?$/,
 			search: function (term, callback) {
-				var usernames;
-				if (!term) {
-					usernames = localUserList.concat(groupList).filter(function(value, index, array) {
-						return array.indexOf(value) === index && value !== app.user.username;
-					}).sort(function(a, b) {
-						return a.toLocaleLowerCase() > b.toLocaleLowerCase();
-					});
-					return callback(usernames);
-				}
-
-				socket.emit('user.search', {query: term}, function(err, userdata) {
-					if (err) {
-						return callback([]);
+				//var topicList;
+				$.getJSON("/api/search/?term=" + term + "&in=titles&sortBy=topic.title&sortDirection=&showAs=posts", function (data) {
+					if (data) {
+						topicList = data.posts.map(function(post) {
+				     		return post.topic.title;
+				     	});
+				     	// save lastData to be used in replacing function
+				     	lastData = data.posts;
+				     	callback(topicList);
 					}
-
-					usernames = userdata.users.map(function(user) {
-						return user.username;
-					});
-
-					subset = localUserList.concat(groupList).filter(function(username) {
-						return username.toLocaleLowerCase().indexOf(term.toLocaleLowerCase()) !== -1;
-					});
-
-					usernames = usernames.concat(subset).filter(function(value, index, array) {
-						return array.indexOf(value) === index;
-					});
-
-					subset = subset.map(function(name) {
-						return name.toLocaleLowerCase();
-					});
-
-					usernames.sort(function(a, b) {
-						if (subset.indexOf(a.toLocaleLowerCase()) !== -1 && subset.indexOf(b.toLocaleLowerCase()) === -1) {
-							return -1;
-						} else if (subset.indexOf(a.toLocaleLowerCase()) === -1 && subset.indexOf(b.toLocaleLowerCase()) !== -1) {
-							return 1;
-						} else {
-							return a.toLocaleLowerCase() > b.toLocaleLowerCase();
-						}
-					});
-
-					// Remove current user from suggestions
-					if (app.user.username && usernames.indexOf(app.user.username) !== -1) {
-						usernames.splice(usernames.indexOf(app.user.username), 1);
-					}
-
-					callback(usernames);
 				});
 			},
 			index: 1,
-			replace: function (mention) {
-				mention = $('<div/>').html(mention).text();
-				return '@' + utils.slugify(mention, true) + ' ';
+			replace: function (mention, ev) {
+				if (lastData.length && lastData[0].topic) {
+					return '[' + mention + '](/topics/' + lastData[0].topic.slug + ') '
+				}
+				else {
+					return;
+				}
 			},
 			cache: true
 		};
-
-		data.strategies.push(strategy);
+		var categorySearch = {
+			match: /\&c([^\s\n]*)?$/,
+			search: function (term, callback) {
+				//var topicList;
+				if (!term) {
+					var categories = catList.filter(function(value, index, array) {
+						return array.indexOf(value) === index;
+					}).sort(function(a, b) {
+						return a.toLocaleLowerCase() > b.toLocaleLowerCase();
+					});
+					callback(categories);
+				} else {
+					callback($.map(catList, function (word) {
+		                return word.indexOf(term) === 0 ? word : null;
+		            }));
+				}
+			},
+			index: 1,
+			replace: function (mention, ev) {
+				function search(nameKey, myArray){
+				    for (var i=0; i < myArray.length; i++) {
+				        if (myArray[i].name === nameKey) {
+				            return myArray[i];
+				        }
+				    }
+				}
+				var resultObject = search(mention, catData);
+				return '[' + resultObject.name + '](/category/' + resultObject.cid + ') '
+			},
+			cache: true
+		};
+		data.strategies.push(topicSearch);
+		data.strategies.push(categorySearch);
 	});
 
 	$(window).on('action:composer.loaded', function(e, data) {
@@ -82,24 +76,33 @@ $(document).ready(function() {
 		composer.attr('data-mentions', '1');
 	});
 
-	function loadDomUsers() {
-		var DOMusers = [];
-		$('[component="post"][data-uid!="0"]').each(function(idx, el) {
-			var	username = el.getAttribute('data-username');
-			if (DOMusers.indexOf(username) === -1) {
-				DOMusers.push(username);
+	function loadCatNames() {
+		$.getJSON("/api/categories", function (data) {
+			if (data) {
+				var childrenCids = [];
+				var allCategories = [];
+				var category;
+				function eachRecursive(obj)
+				{
+				    for (var k in obj)
+				    {
+				        if (typeof obj[k] == "object" && obj[k] !== null) {
+			        		catList.push(obj[k].name);
+			        		category = {
+			        			name: obj[k].name,
+			        			cid: obj[k].cid
+			        		}
+			        		catData.push(category)
+			        	    eachRecursive(obj[k].children);
+				        }
+				        else
+				        {
+				        	return;
+				        }
+				    }
+				}
+				eachRecursive(data.categories);
 			}
 		});
-		return DOMusers;
 	}
-
-	function loadGroupList() {
-		socket.emit('plugins.mentions.listGroups', function(err, groupNames) {
-			if (err) {
-				return app.alertError(err.message);
-			}
-			groupList = groupNames;
-		});
-	}
-
 });

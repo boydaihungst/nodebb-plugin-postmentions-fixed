@@ -1,5 +1,5 @@
 'use strict';
-
+/*
 var	async = require('async');
 var S = module.parent.require('string');
 var winston = module.parent.require('winston');
@@ -16,15 +16,17 @@ var Utils = module.parent.require('../public/src/utils');
 
 var SocketPlugins = module.parent.require('./socket.io/plugins');
 
-var regex = XRegExp('(?:>|\\s)(@[\\p{L}\\d\\-_.]+)', 'g');	// used in post text transform, accounts for HTML
-var rawRegex = XRegExp('(?:^|\\s)(@[\\p{L}\\d\-_.]+)', 'g');	// used in notifications, as raw text is passed in this hook
+var regex = XRegExp('(?:>|\\s)(&p[\\p{L}\\d\\-_.]+)', 'g');	// used in post text transform, accounts for HTML
+var rawRegex = XRegExp('(?:^|\\s)(&[\\p{L}\\d\-_.]+)', 'g');	// used in notifications, as raw text is passed in this hook
 var isLatinMention = /@[\w\d\-_.]+$/;
 var removePunctuationSuffix = function(string) {
 	return string.replace(/[!?.]*$/, '');
 };
 
-var Mentions = {};
+*/
 
+var Mentions = {};
+/*
 SocketPlugins.mentions = {};
 
 Mentions.notify = function(data) {
@@ -181,6 +183,8 @@ function getGroupMemberUids(groupRecipients, callback) {
 	});
 }
 
+
+
 Mentions.parsePost = function(data, callback) {
 	if (!data || !data.postData || !data.postData.content) {
 		return callback(null, data);
@@ -213,12 +217,12 @@ Mentions.parseRaw = function(content, callback) {
 		// Eliminate duplicates
 		return idx === matches.indexOf(cur);
 	}).map(function(match) {
-		/**
-		 *	Javascript-favour of regex does not support lookaround,
-		 *	so need to clean up the cruft by discarding everthing
-		 *	before the @
-		 */
-		var atIndex = match.indexOf('@');
+		//
+		//	Javascript-favour of regex does not support lookaround,
+		//	so need to clean up the cruft by discarding everthing
+		//	before the @
+		//
+		var atIndex = match.indexOf('&');
 		return atIndex !== 0 ? match.slice(atIndex) : match;
 	});
 
@@ -227,9 +231,11 @@ Mentions.parseRaw = function(content, callback) {
 
 		match = removePunctuationSuffix(match);
 
+
+
 		async.parallel({
-			groupExists: async.apply(Groups.existsBySlug, slug),
-			uid: async.apply(User.getUidByUserslug, slug)
+			//groupExists: async.apply(Groups.existsBySlug, slug),
+			topic: async.apply(User.getUidByUserslug, slug)
 		}, function(err, results) {
 			if (err) {
 				return next(err);
@@ -289,9 +295,11 @@ Mentions.split = function(input, isMarkdown, splitBlockquote, splitCode) {
 	return input.split(new RegExp('(' + matchers.join('|') + ')', 'gm'));
 };
 
-/*
-	WebSocket methods
-*/
+
+
+//
+//	WebSocket methods
+//
 
 SocketPlugins.mentions.listGroups = function(socket, data, callback) {
 	Groups.getGroups('groups:visible:createtime', 0, -1, function(err, groups) {
@@ -304,5 +312,7 @@ SocketPlugins.mentions.listGroups = function(socket, data, callback) {
 		callback(null, groups);
 	});
 };
+
+*/
 
 module.exports = Mentions;
