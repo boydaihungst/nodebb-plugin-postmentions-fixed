@@ -28,7 +28,7 @@ $(document).ready(function() {
 			index: 1,
 			replace: function (mention, ev) {
 				if (lastData.length && lastData[0].topic) {
-					return '[' + mention + '](/topics/' + lastData[0].topic.slug + ') '
+					return '[' + mention + '](/topic/' + lastData[0].topic.slug + ') '
 				}
 				else {
 					return;
@@ -39,7 +39,6 @@ $(document).ready(function() {
 		var categorySearch = {
 			match: /\&c([^\s\n]*)?$/,
 			search: function (term, callback) {
-				//var topicList;
 				if (!term) {
 					var categories = catList.filter(function(value, index, array) {
 						return array.indexOf(value) === index;
