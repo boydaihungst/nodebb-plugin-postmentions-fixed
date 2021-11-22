@@ -1,9 +1,22 @@
 {
-	"id": "nodebb-plugin-postmentions",
-	"name": "Post Mentions",
-	"description": "NodeBB Plugin that allows users to mention other topics by prepending an '&t' sign and categories ('&c')",
-	"url": "https://github.com/estebanconstante/nodebb-plugin-postmentions",
-	"scripts": [
-		"static/autofill.js"
-	]
+  "id": "nodebb-plugin-postmentions-fixed",
+  "url": "https://github.com/boydaihungst/nodebb-plugin-postmentions-fixed",
+  "library": "./library.js",
+  "hooks": [
+    {
+      "hook": "static:app.load",
+      "method": "init"
+    },
+    {
+      "hook": "filter:admin.header.build",
+      "method": "addAdminNavigation"
+    },
+    { "hook": "filter:config.get", "method": "appendConfigToClient" }
+  ],
+  "scripts": ["static/lib/main.js"],
+  "less": ["static/style.less"],
+  "acpScripts": ["static/lib/admin.js"],
+  "templates": "static/templates",
+  "languages": "languages",
+  "defaultLang": "en-US"
 }

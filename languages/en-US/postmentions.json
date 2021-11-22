@@ -1,0 +1,7 @@
+{
+  "admin.category-match.label": "Category suggestion will show after typing",
+  "admin.topic-match.label": "Topic suggestion will show after typing",
+  "admin.section.general": "General",
+  "admin.section.topic-filter": "Topic filters",
+  "admin.section.max-space-before-stop-suggest.label": "Stop suggestion after this number of words.eg: if you choose 2 and type &tA B C -> Only show suggestion from A to B"
+}

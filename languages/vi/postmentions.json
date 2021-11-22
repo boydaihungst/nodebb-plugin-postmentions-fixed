@@ -1,0 +1,7 @@
+{
+  "admin.category-match.label": "Chuyên mục sẽ hiển thị gợi ý sau khi gõ",
+  "admin.topic-match.label": "Chủ đề sẽ hiển thị gợi ý sau khi gõ",
+  "admin.section.general": "Thông thường",
+  "admin.section.topic-filter": "Bộ lọc chủ đề",
+  "admin.section.max-space-before-stop-suggest.label": "Gợi ý sẽ dừng lại sau ghi gõ tối đa số từ (Ví dụ nếu chọn 2 và gõ &tA B C D) -> chỉ A đến B sẽ hiện gơi ý"
+}
